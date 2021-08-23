@@ -3,7 +3,31 @@
 TARGET=$1
 RETROPIE_IMAGE=$2
 
-# Flash RetroPie image to target device
-gzip -d -c $RETROPIE_IMAGE | dd of=$TARGET bs=8M
+function mount_all {
+	mount ${TARGET}1 tmp/boot
+	mount ${TARGET}2 tmp/root
+}
 
+function unmount_all {
+	umount tmp/boot >/dev/null 2>&1
+	umount tmp/root >/dev/null 2>&1
+}
+
+# Unmount target if mounted from previous failed run
+unmount_all
+mkdir -p tmp/{boot,root}
+
+set -e
+
+# Flash RetroPie image to target device
+#gzip -d -c $RETROPIE_IMAGE | dd of=$TARGET bs=8M
+
+#sleep 2
+
+echo "Mounting SD card"
+mount_all
+sleep 2
+
+echo "Unmounting SD card"
+unmount_all
 
