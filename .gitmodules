@@ -1,0 +1,3 @@
+[submodule "pip-build"]
+	path = pip-build
+	url = git@github.com:curiouschip/pip-build.git

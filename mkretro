@@ -1,0 +1,9 @@
+#!/bin/bash
+
+TARGET=$1
+RETROPIE_IMAGE=$2
+
+# Flash RetroPie image to target device
+gzip -d -c $RETROPIE_IMAGE | dd of=$TARGET bs=8M
+
+
