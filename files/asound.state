@@ -1,0 +1,335 @@
+state.pipdac {
+	control.1 {
+		iface MIXER
+		name 'ADC Fine Capture Volume'
+		value 0
+		comment {
+			access 'read write'
+			type INTEGER
+			count 1
+			range '0 - 4'
+			dbmin 0
+			dbmax 40
+			dbvalue.0 0
+		}
+	}
+	control.2 {
+		iface MIXER
+		name 'ADC Capture Switch'
+		value true
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.3 {
+		iface MIXER
+		name 'ADC Capture Volume'
+		value 38
+		comment {
+			access 'read write'
+			type INTEGER
+			count 1
+			range '0 - 64'
+			dbmin -2000
+			dbmax 1200
+			dbvalue.0 -100
+		}
+	}
+	control.4 {
+		iface MIXER
+		name 'Mic PGA Capture Volume'
+		value 34
+		comment {
+			access 'read write'
+			type INTEGER
+			count 1
+			range '0 - 119'
+			dbmin 0
+			dbmax 5950
+			dbvalue.0 1700
+		}
+	}
+	control.5 {
+		iface MIXER
+		name 'Speaker Driver Playback Switch'
+		value true
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.6 {
+		iface MIXER
+		name 'Speaker Driver Playback Volume'
+		value 2
+		comment {
+			access 'read write'
+			type INTEGER
+			count 1
+			range '0 - 3'
+			dbmin 600
+			dbmax 2400
+			dbvalue.0 1800
+		}
+	}
+	control.7 {
+		iface MIXER
+		name 'Speaker Analog Playback Volume'
+		value 112
+		comment {
+			access 'read write'
+			type INTEGER
+			count 1
+			range '0 - 127'
+			dbmin -6350
+			dbmax 0
+			dbvalue.0 -750
+		}
+	}
+	control.8 {
+		iface MIXER
+		name 'DAC Playback Volume'
+		value.0 103
+		value.1 103
+		comment {
+			access 'read write'
+			type INTEGER
+			count 2
+			range '0 - 175'
+			dbmin -6350
+			dbmax 2400
+			dbvalue.0 -1200
+			dbvalue.1 -1200
+		}
+	}
+	control.9 {
+		iface MIXER
+		name 'HP Driver Playback Switch'
+		value.0 true
+		value.1 true
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 2
+		}
+	}
+	control.10 {
+		iface MIXER
+		name 'HP Driver Playback Volume'
+		value.0 1
+		value.1 1
+		comment {
+			access 'read write'
+			type INTEGER
+			count 2
+			range '0 - 9'
+			dbmin 0
+			dbmax 900
+			dbvalue.0 100
+			dbvalue.1 100
+		}
+	}
+	control.11 {
+		iface MIXER
+		name 'HP Analog Playback Volume'
+		value.0 84
+		value.1 84
+		comment {
+			access 'read write'
+			type INTEGER
+			count 2
+			range '0 - 127'
+			dbmin -6350
+			dbmax 0
+			dbvalue.0 -2150
+			dbvalue.1 -2150
+		}
+	}
+	control.12 {
+		iface CARD
+		name 'Pip Headphone Jack'
+		value false
+		comment {
+			access read
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.13 {
+		iface CARD
+		name 'Pip Builtin Speaker Jack'
+		value false
+		comment {
+			access read
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.14 {
+		iface MIXER
+		name 'DAC Left Input'
+		value 'Left Data'
+		comment {
+			access 'read write'
+			type ENUMERATED
+			count 1
+			item.0 Off
+			item.1 'Left Data'
+			item.2 'Right Data'
+			item.3 Mono
+		}
+	}
+	control.15 {
+		iface MIXER
+		name 'DAC Right Input'
+		value 'Right Data'
+		comment {
+			access 'read write'
+			type ENUMERATED
+			count 1
+			item.0 Off
+			item.1 'Right Data'
+			item.2 'Left Data'
+			item.3 Mono
+		}
+	}
+	control.16 {
+		iface MIXER
+		name 'HP Left Switch'
+		value true
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.17 {
+		iface MIXER
+		name 'HP Right Switch'
+		value true
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.18 {
+		iface MIXER
+		name 'MIC1LP P-Terminal'
+		value 'FFR 10 Ohm'
+		comment {
+			access 'read write'
+			type ENUMERATED
+			count 1
+			item.0 Off
+			item.1 'FFR 10 Ohm'
+			item.2 'FFR 20 Ohm'
+			item.3 'FFR 40 Ohm'
+		}
+	}
+	control.19 {
+		iface MIXER
+		name 'MIC1RP P-Terminal'
+		value Off
+		comment {
+			access 'read write'
+			type ENUMERATED
+			count 1
+			item.0 Off
+			item.1 'FFR 10 Ohm'
+			item.2 'FFR 20 Ohm'
+			item.3 'FFR 40 Ohm'
+		}
+	}
+	control.20 {
+		iface MIXER
+		name 'MIC1LM P-Terminal'
+		value Off
+		comment {
+			access 'read write'
+			type ENUMERATED
+			count 1
+			item.0 Off
+			item.1 'FFR 10 Ohm'
+			item.2 'FFR 20 Ohm'
+			item.3 'FFR 40 Ohm'
+		}
+	}
+	control.21 {
+		iface MIXER
+		name 'MIC1LM M-Terminal'
+		value 'FFR 10 Ohm'
+		comment {
+			access 'read write'
+			type ENUMERATED
+			count 1
+			item.0 Off
+			item.1 'FFR 10 Ohm'
+			item.2 'FFR 20 Ohm'
+			item.3 'FFR 40 Ohm'
+		}
+	}
+	control.22 {
+		iface MIXER
+		name 'Output Left From Left DAC'
+		value true
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.23 {
+		iface MIXER
+		name 'Output Left From MIC1LP'
+		value false
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.24 {
+		iface MIXER
+		name 'Output Left From MIC1RP'
+		value false
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.25 {
+		iface MIXER
+		name 'Output Right From Right DAC'
+		value true
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.26 {
+		iface MIXER
+		name 'Output Right From MIC1RP'
+		value false
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.27 {
+		iface MIXER
+		name 'Speaker Switch'
+		value true
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+}
