@@ -2,31 +2,80 @@
 
 TARGET=$1
 RETROPIE_IMAGE=$2
+KERNEL=packages/kernel_5.4.83_20210712231422_gcc8.3.0.tgz
+
+echo "retropie: $RETROPIE_IMAGE"
+sleep 3
+
+# RetroPie default root partition size + 400MiB
+ROOT_SIZE=3519021055
 
 function mount_all {
-	mount ${TARGET}1 tmp/boot
 	mount ${TARGET}2 tmp/root
+	mount ${TARGET}1 tmp/root/boot
 }
 
 function unmount_all {
-	umount tmp/boot >/dev/null 2>&1
+	umount tmp/root/boot >/dev/null 2>&1
 	umount tmp/root >/dev/null 2>&1
 }
 
 # Unmount target if mounted from previous failed run
 unmount_all
-mkdir -p tmp/{boot,root}
+mkdir -p tmp/root
 
 set -e
 
 # Flash RetroPie image to target device
-#gzip -d -c $RETROPIE_IMAGE | dd of=$TARGET bs=8M
+gzip -d -c $RETROPIE_IMAGE | dd of=$TARGET bs=8M
 
-#sleep 2
+sleep 2
+
+echo "Resizing partition"
+parted --script $TARGET unit B resizepart 2 $ROOT_SIZE
+
+echo "Partition resized, waiting 3s..."
+sleep 3
+
+echo "Resizing filesystem"
+e2fsck -f ${TARGET}2
+resize2fs ${TARGET}2
 
 echo "Mounting SD card"
 mount_all
 sleep 2
+
+pushd pip-build/src/imager/boot
+make
+popd
+rm -rf tmp/root/boot/*.{dtb,img}
+rm -rf tmp/root/boot/overlays
+tar -xf $KERNEL -C tmp/root/
+cp pip-build/src/imager/boot/overlays/*.dtbo tmp/root/boot/overlays
+cp pip-build/src/imager/boot/dt-blob.bin tmp/root/boot
+cp files/config.txt tmp/root/boot
+
+# Set up kernel module dir
+rm -rf tmp/root/lib/modules/*
+mv tmp/root/usr/lib/modules/* tmp/root/lib/modules
+
+# Install sid + deps
+cp /etc/resolv.conf tmp/root/etc/resolv.conf
+chroot tmp/root sh -c "apt-get install -y libusb-1.0 libuv1 libasound2"
+cp packages/sid.tgz tmp/root/sid.tgz
+chroot tmp/root sh -c "tar xvf sid.tgz && rm -f sid.tgz && systemctl enable pip-sid.service"
+cp files/sid.ini tmp/root/opt/pip/etc/sid.ini
+
+# Remove WiFi adapter from blacklist and enable wlan0
+rm -f tmp/root/etc/modprobe.d/blacklist-8192cu.conf
+rm -f tmp/root/etc/modprobe.d/blacklist-rtl8xxxu.conf
+sudo install -m 644 -o root -g root files/interfaces tmp/root/etc/network/interfaces
+
+# Copy alsa config
+echo snd-soc-pip-dac >> tmp/root/etc/modules
+sudo install -m 644 -o root -g root files/asound.state "tmp/root/var/lib/alsa/asound.state"
+
+# Copy retropie config
 
 echo "Unmounting SD card"
 unmount_all
