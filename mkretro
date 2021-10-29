@@ -27,6 +27,7 @@ mkdir -p tmp/root
 set -e
 
 # # Flash RetroPie image to target device
+# echo "Flashing image"
 # gzip -d -c $RETROPIE_IMAGE | dd of=$TARGET bs=8M
 
 # sleep 2
@@ -77,7 +78,7 @@ sleep 2
 # install -m 644 -o root -g root files/asound.state "tmp/root/var/lib/alsa/asound.state"
 
 # # Debug only - WiFi key
-# if [ if "files/wpa_supplicant.conf" ]; then
+# if [ -f "files/wpa_supplicant.conf" ]; then
 # 	touch tmp/root/boot/ssh
 # 	cp files/wpa_supplicant.conf tmp/root/boot/wifikeyfile.txt
 # fi
