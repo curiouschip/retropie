@@ -75,6 +75,12 @@ sudo install -m 644 -o root -g root files/interfaces tmp/root/etc/network/interf
 echo snd-soc-pip-dac >> tmp/root/etc/modules
 sudo install -m 644 -o root -g root files/asound.state "tmp/root/var/lib/alsa/asound.state"
 
+# Debug only - WiFi key
+if [ if "files/wpa_supplicant.conf" ]; then
+	sudo touch tmp/root/boot/ssh
+	sudo cp files/wpa_supplicant.conf tmp/root/boot/wifikeyfile.txt
+fi
+
 # Copy retropie config
 
 echo "Unmounting SD card"
