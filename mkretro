@@ -69,16 +69,16 @@ cp files/sid.ini tmp/root/opt/pip/etc/sid.ini
 # Remove WiFi adapter from blacklist and enable wlan0
 rm -f tmp/root/etc/modprobe.d/blacklist-8192cu.conf
 rm -f tmp/root/etc/modprobe.d/blacklist-rtl8xxxu.conf
-sudo install -m 644 -o root -g root files/interfaces tmp/root/etc/network/interfaces
+install -m 644 -o root -g root files/interfaces tmp/root/etc/network/interfaces
 
 # Copy alsa config
 echo snd-soc-pip-dac >> tmp/root/etc/modules
-sudo install -m 644 -o root -g root files/asound.state "tmp/root/var/lib/alsa/asound.state"
+install -m 644 -o root -g root files/asound.state "tmp/root/var/lib/alsa/asound.state"
 
 # Debug only - WiFi key
 if [ if "files/wpa_supplicant.conf" ]; then
-	sudo touch tmp/root/boot/ssh
-	sudo cp files/wpa_supplicant.conf tmp/root/boot/wifikeyfile.txt
+	touch tmp/root/boot/ssh
+	cp files/wpa_supplicant.conf tmp/root/boot/wifikeyfile.txt
 fi
 
 # Copy retropie config
