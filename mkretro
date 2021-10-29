@@ -55,6 +55,7 @@ tar -xf $KERNEL -C tmp/root/
 cp pip-build/src/imager/boot/overlays/*.dtbo tmp/root/boot/overlays
 cp pip-build/src/imager/boot/dt-blob.bin tmp/root/boot
 cp files/config.txt tmp/root/boot
+cp files/cmdline.txt tmp/root/boot
 
 # Set up kernel module dir
 rm -rf tmp/root/lib/modules/*
