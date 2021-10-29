@@ -4,8 +4,8 @@ TARGET=$1
 RETROPIE_IMAGE=$2
 KERNEL=packages/kernel_5.4.83_20210712231422_gcc8.3.0.tgz
 
-echo "retropie: $RETROPIE_IMAGE"
-sleep 3
+# echo "retropie: $RETROPIE_IMAGE"
+# sleep 3
 
 # RetroPie default root partition size + 400MiB
 ROOT_SIZE=3519021055
@@ -26,64 +26,66 @@ mkdir -p tmp/root
 
 set -e
 
-# Flash RetroPie image to target device
-gzip -d -c $RETROPIE_IMAGE | dd of=$TARGET bs=8M
+# # Flash RetroPie image to target device
+# gzip -d -c $RETROPIE_IMAGE | dd of=$TARGET bs=8M
 
-sleep 2
+# sleep 2
 
-echo "Resizing partition"
-parted --script $TARGET unit B resizepart 2 $ROOT_SIZE
+# echo "Resizing partition"
+# parted --script $TARGET unit B resizepart 2 $ROOT_SIZE
 
-echo "Partition resized, waiting 3s..."
-sleep 3
+# echo "Partition resized, waiting 3s..."
+# sleep 3
 
-echo "Resizing filesystem"
-e2fsck -f ${TARGET}2
-resize2fs ${TARGET}2
+# echo "Resizing filesystem"
+# e2fsck -f ${TARGET}2
+# resize2fs ${TARGET}2
 
 echo "Mounting SD card"
 mount_all
 sleep 2
 
-pushd pip-build/src/imager/boot
-make
-popd
-rm -rf tmp/root/boot/*.{dtb,img}
-rm -rf tmp/root/boot/overlays
-tar -xf $KERNEL -C tmp/root/
-cp pip-build/src/imager/boot/overlays/*.dtbo tmp/root/boot/overlays
-cp pip-build/src/imager/boot/dt-blob.bin tmp/root/boot
-cp files/config.txt tmp/root/boot
-cp files/cmdline.txt tmp/root/boot
+# pushd pip-build/src/imager/boot
+# make
+# popd
+# rm -rf tmp/root/boot/*.{dtb,img}
+# rm -rf tmp/root/boot/overlays
+# tar -xf $KERNEL -C tmp/root/
+# cp pip-build/src/imager/boot/overlays/*.dtbo tmp/root/boot/overlays
+# cp pip-build/src/imager/boot/dt-blob.bin tmp/root/boot
+# cp files/config.txt tmp/root/boot
+# cp files/cmdline.txt tmp/root/boot
 
-# Set up kernel module dir
-rm -rf tmp/root/lib/modules/*
-mv tmp/root/usr/lib/modules/* tmp/root/lib/modules
+# # Set up kernel module dir
+# rm -rf tmp/root/lib/modules/*
+# mv tmp/root/usr/lib/modules/* tmp/root/lib/modules
 
-# Install sid + deps
-cp /etc/resolv.conf tmp/root/etc/resolv.conf
-chroot tmp/root sh -c "apt-get install -y libusb-1.0 libuv1 libasound2"
-cp packages/sid.tgz tmp/root/sid.tgz
-chroot tmp/root sh -c "tar xvf sid.tgz && rm -f sid.tgz && systemctl enable pip-sid.service"
-cp files/sid.ini tmp/root/opt/pip/etc/sid.ini
+# # Install sid + deps
+# cp /etc/resolv.conf tmp/root/etc/resolv.conf
+# chroot tmp/root sh -c "apt-get install -y libusb-1.0 libuv1 libasound2"
+# cp packages/sid.tgz tmp/root/sid.tgz
+# chroot tmp/root sh -c "tar xvf sid.tgz && rm -f sid.tgz && systemctl enable pip-sid.service"
+# cp files/sid.ini tmp/root/opt/pip/etc/sid.ini
 
-# Remove WiFi adapter from blacklist and enable wlan0
-rm -f tmp/root/etc/modprobe.d/blacklist-8192cu.conf
-rm -f tmp/root/etc/modprobe.d/blacklist-rtl8xxxu.conf
-install -m 644 -o root -g root files/interfaces tmp/root/etc/network/interfaces
+# # Remove WiFi adapter from blacklist and enable wlan0
+# rm -f tmp/root/etc/modprobe.d/blacklist-8192cu.conf
+# rm -f tmp/root/etc/modprobe.d/blacklist-rtl8xxxu.conf
+# install -m 644 -o root -g root files/interfaces tmp/root/etc/network/interfaces
 
-# Copy alsa config
-echo snd-soc-pip-dac >> tmp/root/etc/modules
-install -m 644 -o root -g root files/asound.state "tmp/root/var/lib/alsa/asound.state"
+# # Copy alsa config
+# echo snd-soc-pip-dac >> tmp/root/etc/modules
+# install -m 644 -o root -g root files/asound.state "tmp/root/var/lib/alsa/asound.state"
 
-# Debug only - WiFi key
-if [ if "files/wpa_supplicant.conf" ]; then
-	touch tmp/root/boot/ssh
-	cp files/wpa_supplicant.conf tmp/root/boot/wifikeyfile.txt
-fi
+# # Debug only - WiFi key
+# if [ if "files/wpa_supplicant.conf" ]; then
+# 	touch tmp/root/boot/ssh
+# 	cp files/wpa_supplicant.conf tmp/root/boot/wifikeyfile.txt
+# fi
 
 # Copy retropie config
+cp files/es_input.cfg tmp/root/opt/retropie/configs/all/emulationstation/es_input.cfg
+cp files/retroarch.cfg tmp/root/opt/retropie/configs/all/retroarch.cfg
+cp files/Pip\ Virtual\ Gamepad.cfg  tmp/root/opt/retropie/configs/retroarch/autoconfig/Pip\ Virtual\ Gamepad.cfg
 
 echo "Unmounting SD card"
 unmount_all
-
