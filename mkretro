@@ -77,12 +77,6 @@ install -m 644 -o root -g root files/interfaces tmp/root/etc/network/interfaces
 echo snd-soc-pip-dac >> tmp/root/etc/modules
 install -m 644 -o root -g root files/asound.state "tmp/root/var/lib/alsa/asound.state"
 
-# Debug only - WiFi key
-if [ -f "files/wpa_supplicant.conf" ]; then
-	touch tmp/root/boot/ssh
-	cp files/wpa_supplicant.conf tmp/root/boot/wpa_supplicant.conf
-fi
-
 # Copy retropie config
 cp files/es_input.cfg tmp/root/opt/retropie/configs/all/emulationstation/es_input.cfg
 cp files/retroarch.cfg tmp/root/opt/retropie/configs/all/retroarch.cfg
