@@ -85,7 +85,7 @@ sleep 2
 # Copy retropie config
 cp files/es_input.cfg tmp/root/opt/retropie/configs/all/emulationstation/es_input.cfg
 cp files/retroarch.cfg tmp/root/opt/retropie/configs/all/retroarch.cfg
-cp files/Pip\ Virtual\ Gamepad.cfg  tmp/root/opt/retropie/configs/retroarch/autoconfig/Pip\ Virtual\ Gamepad.cfg
+cp files/Pip\ Virtual\ Gamepad.cfg  tmp/root/opt/retropie/configs/all/retroarch/autoconfig/Pip\ Virtual\ Gamepad.cfg
 
 echo "Unmounting SD card"
 unmount_all
