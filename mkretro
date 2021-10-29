@@ -80,7 +80,7 @@ sleep 2
 # # Debug only - WiFi key
 # if [ -f "files/wpa_supplicant.conf" ]; then
 # 	touch tmp/root/boot/ssh
-# 	cp files/wpa_supplicant.conf tmp/root/boot/wifikeyfile.txt
+# 	cp files/wpa_supplicant.conf tmp/root/boot/wpa_supplicant.conf
 # fi
 
 # Copy retropie config
