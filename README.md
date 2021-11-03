@@ -9,3 +9,7 @@ A script to flashing a RetroPie image and making it Pip compatible.
   3. run `sudo ./mkretro $target_device $retropie_image_file`
 
 RetroPie will be flashed to the target SD card, modified to be Pip compatible, then cloned/compressed into the current directory.
+
+## Updating kernel
+
+To bundle a new kernel replace the kernel package in the `packages` directory with the new file.
