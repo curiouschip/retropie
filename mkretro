@@ -2,10 +2,19 @@
 
 TARGET=$1
 RETROPIE_IMAGE=$2
-KERNEL=packages/kernel_5.4.83_20210712231422_gcc8.3.0.tgz
+
+RETROPIE_VERSION=$(echo $RETROPIE_IMAGE | grep -Eo "[0-9]+\.[0-9]+\.[0-9]+")
+
+KERNEL=(packages/kernel_*.tgz)
+KERNEL=${KERNEL[0]}
+KERNEL_VERSION=$(echo $KERNEL | grep -Eo "kernel_[0-9]+\.[0-9]+\.[0-9]+" | tr '_' '-')
+KERNEL_COMPILER=$(echo $KERNEL | grep -Eo "gcc[0-9]+\.[0-9]+\.[0-9]+")
+
+OUTPUT_IMAGE="retropie-pip_retropie-${RETROPIE_VERSION}_${KERNEL_VERSION}-${KERNEL_COMPILER/gcc/gcc-}.img.gz"
 
 echo "retropie: $RETROPIE_IMAGE"
-sleep 3
+echo "kernel: $KERNEL"
+echo "output image: $OUTPUT_IMAGE"
 
 # RetroPie default root partition size + 400MiB
 ROOT_SIZE=3519021055
@@ -84,3 +93,10 @@ cp files/Pip\ Virtual\ Gamepad.cfg  tmp/root/opt/retropie/configs/all/retroarch/
 
 echo "Unmounting SD card"
 unmount_all
+
+END=$(sudo parted /dev/sda -m 'unit MiB print' | tail -n 1 | cut -d ':' -f 3 | sed 's/[^0-9]*//g')
+
+echo "Cloning image"
+dd if=${TARGET} bs=1M count="$(($END+2))" | gzip > $OUTPUT_IMAGE
+
+echo "Image written to $OUTPUT_IMAGE"
